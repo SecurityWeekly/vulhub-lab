@@ -1,0 +1,111 @@
+version: '2.2'
+services:
+
+# https://github.com/vulhub/vulhub/tree/master/bash/shellshock
+ shellshock:
+   image: vulhub/bash:4.3.0-with-httpd
+   container_name: shellshock
+   ports:
+    - "80"
+   volumes:
+    - ./bash/shellshock/safe.cgi:/var/www/html/safe.cgi
+    - ./bash/shellshock/victim.cgi:/var/www/html/victim.cgi
+   hostname: shellshock
+   networks:
+     vulhubnet:
+       ipv4_address: 10.1.1.5
+
+# https://github.com/vulhub/vulhub/tree/master/jenkins/CVE-2018-1000861
+ jenkins:
+   image: vulhub/jenkins:2.138
+   container_name: jenkins
+   init: true
+   ports:
+    - "50000"
+    - "8080"
+   hostname: jenkins
+   networks:
+     vulhubnet:
+       ipv4_address: 10.1.1.6
+
+# https://github.com/vulhub/vulhub/tree/master/phpmyadmin/CVE-2018-12613
+ phpmyadmin:
+   image: vulhub/phpmyadmin:4.8.1
+   container_name: phpmyadmin
+   volumes:
+    - ./phpmyadmin/CVE-2018-12613/config.inc.php:/var/www/html/config.inc.php
+   ports:
+    - "80"
+   depends_on:
+    - mysql
+   hostname: phpmyadmin
+   networks:
+     vulhubnet:
+       ipv4_address: 10.1.1.7
+
+ mysql:
+   image: mysql:5.5
+   container_name: mysql
+   environment:
+    - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    - MYSQL_DATABASE=test
+    - MYSQL_USER=test
+    - MYSQL_PASSWORD=test
+   hostname: mysql
+   networks:
+     vulhubnet:
+       ipv4_address: 10.1.1.8
+
+ telnetserver:
+   build: ./telnetserver
+   container_name: telnetserver
+   tty: true
+   ports:
+     - "23"
+   hostname: telnetserver
+   networks:
+     vulhubnet:
+       ipv4_address: 10.1.1.9
+
+# https://github.com/vulhub/vulhub/tree/master/log4j/CVE-2021-44228
+ solr-log4j:
+   image: vulhub/solr:8.11.0
+   container_name: solr-log4j
+   ports:
+     - "8983"
+   hostname: solr-log4j
+   networks:
+     vulhubnet:
+       ipv4_address: 10.1.1.11
+ kali:
+   build: ./kali
+   # Note: If you don't want to build everything, use the image then apt install what you want/need
+   # Also note: Building everything, even kali-linux-headless, takes a really long time to build
+   #image: kalilinux/kali-rolling
+   container_name: kali
+   hostname: kali
+   tty: true
+   networks:
+     vulhubnet:
+       ipv4_address: 10.1.1.10
+
+networks:
+  vulhubnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.1.1.0/24
+          gateway: 10.1.1.1
+
+# docker network create --subnet=10.1.1.0/24 vulhubnet
+#
+# Add these entries to your /etc/hosts file:
+#
+# Vulhub lab
+#10.1.1.5        shellshock
+#10.1.1.6        jenkins
+#10.1.1.7        phpmyadmin
+#10.1.1.8        mysql
+#10.1.1.9        telnetserver
+#10.1.1.10       kali
+#10.1.1.11       solr-log4j
