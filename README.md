@@ -1,5 +1,4 @@
----
-
+## Intro
 This docker-compose setup allows you to easily spin up a security testing/research environment.
 
 This was done for our presentation "Do It Yourself: Building a Security Lab At Home" in January 2021.
@@ -8,7 +7,6 @@ The main purpose is to create a separate network and containers that can be refe
 
 This also allows you to have multiple containers listening on the same port to avoid confusing port mappings.
 
----
 ## Usage
 
 Simply clone this repository and run:
