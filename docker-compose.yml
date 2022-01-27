@@ -78,16 +78,52 @@ services:
      vulhubnet:
        ipv4_address: 10.1.1.11
  kali:
-   build: ./kali
+   #build: ./kali
    # Note: If you don't want to build everything, use the image then apt install what you want/need
    # Also note: Building everything, even kali-linux-headless, takes a really long time to build
-   #image: kalilinux/kali-rolling
+   image: kalilinux/kali-rolling
    container_name: kali
    hostname: kali
    tty: true
    networks:
      vulhubnet:
        ipv4_address: 10.1.1.10
+
+# https://github.com/trustedsec/trevorc2
+
+ trevorc2:
+   build: ./trevorc2
+   container_name: trevorc2
+   hostname: trevorc2
+   tty: true
+   networks:
+     vulhubnet:
+       ipv4_address: 10.1.1.12
+
+# https://github.com/opsxcq/exploit-CVE-2017-7494
+# https://github.com/ly4k/PwnKit
+
+ vul-linux:
+   build: ./vul-linux
+   container_name: vul-linux
+   hostname: vul-linux
+   tty: true
+   volumes:
+     - ./exploits:/exploits
+   networks:
+     vulhubnet:
+       ipv4_address: 10.1.1.13
+
+ http-server:
+   build: ./http-server
+   container_name: http-server
+   hostname: http-server
+   tty: true
+   volumes:
+     - ./files:/files
+   networks:
+     vulhubnet:
+       ipv4_address: 10.1.1.14
 
 networks:
   vulhubnet:
@@ -109,3 +145,5 @@ networks:
 #10.1.1.9        telnetserver
 #10.1.1.10       kali
 #10.1.1.11       solr-log4j
+#10.1.1.12       trevorc2
+#10.1.1.13       trevorc2
