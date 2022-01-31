@@ -60,9 +60,12 @@ services:
    build: ./telnetserver
    container_name: telnetserver
    tty: true
+   stdin_open: true
    ports:
      - "23"
    hostname: telnetserver
+   volumes:
+     - ./files:/files
    networks:
      vulhubnet:
        ipv4_address: 10.1.1.9
@@ -85,6 +88,7 @@ services:
    container_name: kali
    hostname: kali
    tty: true
+   stdin_open: true
    networks:
      vulhubnet:
        ipv4_address: 10.1.1.10
@@ -95,10 +99,26 @@ services:
    build: ./trevorc2
    container_name: trevorc2
    hostname: trevorc2
+   stdin_open: true
    tty: true
    networks:
      vulhubnet:
        ipv4_address: 10.1.1.12
+
+# https://github.com/trustedsec/trevorc2
+
+ merlin:
+   image: ne0nd0g/merlin
+   container_name: merlin
+   hostname: merlin
+   stdin_open: true
+   tty: true
+   volumes:
+   - ./merlin/server-log:/opt/merlin/data/log
+   - ./merlin/agent-log:/opt/merlin/data/agents
+   networks:
+     vulhubnet:
+       ipv4_address: 10.1.1.15
 
 # https://github.com/opsxcq/exploit-CVE-2017-7494
 # https://github.com/ly4k/PwnKit
@@ -110,6 +130,7 @@ services:
    tty: true
    volumes:
      - ./exploits:/exploits
+     - ./files:/files
    networks:
      vulhubnet:
        ipv4_address: 10.1.1.13
@@ -146,4 +167,6 @@ networks:
 #10.1.1.10       kali
 #10.1.1.11       solr-log4j
 #10.1.1.12       trevorc2
-#10.1.1.13       trevorc2
+#10.1.1.13       vul-linux
+#10.1.1.14       http-server
+#10.1.1.15       merlin

@@ -1,0 +1,18 @@
+To start the listener:
+
+$ docker attach merlin
+
+Merlin» listeners
+Merlin[listeners]» use http2
+Merlin[listeners][http2]» set Interface 10.1.1.15
+Merlin[listeners][http2]»
+[+] set Interface to: 10.1.1.15
+Merlin[listeners][http2]»
+Merlin[listeners][http2]» start
+
+[-] Certificate was not found at: /opt/merlin/data/x509/server.crt
+Creating in-memory x.509 certificate used for this session only
+
+[+] Default listener was created with an ID of: 885fe288-a770-4baf-9cc4-29e024643a01
+
+[+] Started HTTP2 listener on 10.1.1.15:443
