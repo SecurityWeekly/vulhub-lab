@@ -5,8 +5,11 @@ services:
  shellshock:
    image: vulhub/bash:4.3.0-with-httpd
    container_name: shellshock
+   tty: true
+   stdin_open: true
    ports:
     - "80"
+    - "22"
    volumes:
     - ./bash/shellshock/safe.cgi:/var/www/html/safe.cgi
     - ./bash/shellshock/victim.cgi:/var/www/html/victim.cgi
@@ -19,6 +22,8 @@ services:
  jenkins:
    image: vulhub/jenkins:2.138
    container_name: jenkins
+   tty: true
+   stdin_open: true
    init: true
    ports:
     - "50000"
@@ -32,6 +37,8 @@ services:
  phpmyadmin:
    image: vulhub/phpmyadmin:4.8.1
    container_name: phpmyadmin
+   tty: true
+   stdin_open: true
    volumes:
     - ./phpmyadmin/CVE-2018-12613/config.inc.php:/var/www/html/config.inc.php
    ports:
@@ -74,6 +81,8 @@ services:
  solr-log4j:
    image: vulhub/solr:8.11.0
    container_name: solr-log4j
+   tty: true
+   stdin_open: true
    ports:
      - "8983"
    hostname: solr-log4j
@@ -81,14 +90,16 @@ services:
      vulhubnet:
        ipv4_address: 10.1.1.11
  kali:
-   #build: ./kali
+   build: ./kali
    # Note: If you don't want to build everything, use the image then apt install what you want/need
    # Also note: Building everything, even kali-linux-headless, takes a really long time to build
-   image: kalilinux/kali-rolling
+   #image: kalilinux/kali-rolling
    container_name: kali
    hostname: kali
    tty: true
    stdin_open: true
+   ports:
+     - "22"
    networks:
      vulhubnet:
        ipv4_address: 10.1.1.10
@@ -127,9 +138,9 @@ services:
    build: ./vul-linux
    container_name: vul-linux
    hostname: vul-linux
+   stdin_open: true
    tty: true
    volumes:
-     - ./exploits:/exploits
      - ./files:/files
    networks:
      vulhubnet:
@@ -139,7 +150,11 @@ services:
    build: ./http-server
    container_name: http-server
    hostname: http-server
+   stdin_open: true
    tty: true
+   ports:
+     - "80"
+     - "22"
    volumes:
      - ./files:/files
    networks:
