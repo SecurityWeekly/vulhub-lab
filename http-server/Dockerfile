@@ -20,5 +20,5 @@ RUN apt-get update && \
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/entrypoint.sh"]
 #CMD ["python3", "-m", "http.server", "80"]
