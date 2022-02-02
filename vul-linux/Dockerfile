@@ -6,7 +6,7 @@ MAINTAINER t0kx <t0kx@protonmail.ch>
 RUN apt-get update && \
     apt-get upgrade -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    wget libpam0g-dev build-essential policykit-1 \
+    wget curl netcat libpam0g-dev build-essential policykit-1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # configure vuln application
