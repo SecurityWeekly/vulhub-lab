@@ -183,6 +183,25 @@ services:
      vulhubnet:
        ipv4_address: 10.1.1.16
 
+ windc:
+   build: ./windc
+   container_name: windc
+   hostname: windc
+   stdin_open: true
+   tty: true
+   privileged: true
+   cap_add:
+     - NET_ADMIN
+     - SYS_ADMIN
+   volumes:
+     - /sys/fs/cgroup:/sys/fs/cgroup:rw
+   devices:
+     - /dev/kvm
+     - /dev/net/tun
+   networks:
+     vulhubnet:
+       ipv4_address: 10.1.1.17
+
 networks:
   vulhubnet:
     driver: bridge
